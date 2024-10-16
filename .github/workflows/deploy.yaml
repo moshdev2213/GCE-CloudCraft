@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Vite React App to GCE on push to main branch
+    name: Deploy Vite React App to GCE on push to master branch
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
       # Step 3: Install dependencies and build the Vite React app
       - name: Install dependencies and build
@@ -28,17 +28,20 @@ jobs:
           npm install
           npm run build
 
-      # Step 4: Deploy build files to GCE server
-      - name: Deploy to GCE server
-        uses: easingthemes/ssh-deploy@v5.1.0
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.GCE_SSH_KEY }} 
-          REMOTE_HOST: ${{ secrets.GCE_HOST_IP }} 
-          REMOTE_USER: ${{ secrets.GCE_USERNAME }} 
-          TARGET: /var/www/html/ 
-          SOURCE: ./dist
+      # Step 4: Set up SSH key
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GCE_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.GCE_HOST_IP }} >> ~/.ssh/known_hosts
 
-      # Step 5: Execute remote commands on the GCE instance
+      # Step 5: Rsync files to the GCE server
+      - name: Rsync files
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" ./dist/ ${{ secrets.GCE_USERNAME }}@${{ secrets.GCE_HOST_IP }}:/var/www/html/
+
+      # Step 6: Execute remote commands on the GCE instance
       - name: Execute remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -46,10 +49,15 @@ jobs:
           username: ${{ secrets.GCE_USERNAME }}
           key: ${{ secrets.GCE_SSH_KEY }}
           script: |
+            # Update package index
             sudo apt-get -y update
+            
+            # Install Nginx
             sudo apt-get install -y nginx
+            
+            # Start and enable Nginx service
             sudo systemctl start nginx
             sudo systemctl enable nginx
-            # sudo rm -rf /var/www/html/*
-            # sudo mv /var/www/html/*
+            
+            # Restart Nginx to apply changes
             sudo systemctl restart nginx
