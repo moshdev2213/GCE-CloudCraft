@@ -16,17 +16,6 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H your_host >> ~/.ssh/known_hosts
-
-      - name: Rsync files
-        run: |
-          rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" ./dist user@host:/var/www/html/
-
       # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
