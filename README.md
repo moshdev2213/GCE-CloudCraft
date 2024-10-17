@@ -1,5 +1,5 @@
 
-# GCE-CloudCraft CI/CD Configuration
+# GCE-CloudCraft 🚀☁
 
 <img width="1722" alt="Frame 2 (1)" src="https://github.com/user-attachments/assets/c0f4a3c7-929f-456c-9c16-d8e6a6c440e9">
 
