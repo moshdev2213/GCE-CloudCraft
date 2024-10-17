@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Vite React App to GCE on push to master branch
+    name: Deploy to GCE
     runs-on: ubuntu-latest
 
     steps:
