@@ -27,7 +27,7 @@ function App() {
         </button>
       </div>
       <p className="read-the-docs">
-        Created In Order To Learn GCP Deployments
+        Created In Order To Learn GCP Deployments.
       </p>
       <p className="read-the-docs">
         made with ❤ <a target='_blank' href="https://github.com/moshdev2213">@moshdev2213</a>
