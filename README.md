@@ -3,6 +3,8 @@
 
 <img width="1722" alt="Frame 2 (1)" src="https://github.com/user-attachments/assets/c0f4a3c7-929f-456c-9c16-d8e6a6c440e9">
 
+## 👀 Overview
+
 Welcome to **GCE-CloudCraft**! This project showcases a React Vite application deployed on Google Cloud Platform (GCP) using a Virtual Machine (VM) and an Nginx server. The deployment process ensures security by utilizing Ngrok to expose a dynamic URL, protecting the server's IP from direct public exposure. CI/CD is efficiently managed with GitHub Actions. 
 
 ## 📚 Table of Contents
